@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <!-- Vertical Guideline ato separate left and right halves -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalHalfGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <!-- Color Display Box that takes the left side of the screen -->
+    <View
+        android:id="@+id/colorDisplayBox"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/verticalHalfGuideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- ScrollView for accessibility controls on smaller screens -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/verticalHalfGuideline"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- Color Picker Title -->
+            <TextView
+                android:id="@+id/titleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Color Picker"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Red Color Controls (Text/Toggle/SeekBar/Textbox) -->
+            <TextView
+                android:id="@+id/redLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Red"
+                android:textColor="#FF0000"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/redSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:checked="true"
+                app:layout_constraintBottom_toBottomOf="@+id/redLabel"
+                app:layout_constraintStart_toEndOf="@+id/redLabel"
+                app:layout_constraintTop_toTopOf="@+id/redLabel" />
+
+            <SeekBar
+                android:id="@+id/redSeekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:max="100"
+                android:progress="0"
+                android:minHeight="48dp"
+                app:layout_constraintBottom_toBottomOf="@+id/redSwitch"
+                app:layout_constraintEnd_toStartOf="@+id/redValueEditText"
+                app:layout_constraintStart_toEndOf="@+id/redSwitch"
+                app:layout_constraintTop_toTopOf="@+id/redSwitch" />
+
+            <EditText
+                android:id="@+id/redValueEditText"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:inputType="numberDecimal"
+                android:text="0.0"
+                android:textAlignment="center"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/redSeekBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/redSeekBar" />
+
+            <!-- Green Color Controls (Text/Toggle/SeekBar/Textbox) -->
+            <TextView
+                android:id="@+id/greenLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Green"
+                android:textColor="#00FF00"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/redLabel" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/greenSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:checked="true"
+                app:layout_constraintBottom_toBottomOf="@+id/greenLabel"
+                app:layout_constraintStart_toEndOf="@+id/greenLabel"
+                app:layout_constraintTop_toTopOf="@+id/greenLabel" />
+
+            <SeekBar
+                android:id="@+id/greenSeekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:max="100"
+                android:progress="0"
+                android:minHeight="48dp"
+                app:layout_constraintBottom_toBottomOf="@+id/greenSwitch"
+                app:layout_constraintEnd_toStartOf="@+id/greenValueEditText"
+                app:layout_constraintStart_toEndOf="@+id/greenSwitch"
+                app:layout_constraintTop_toTopOf="@+id/greenSwitch" />
+
+            <EditText
+                android:id="@+id/greenValueEditText"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:inputType="numberDecimal"
+                android:text="0.0"
+                android:textAlignment="center"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/greenSeekBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/greenSeekBar" />
+
+            <!-- Blue Color Controls (Text/Toggle/SeekBar/Textbox) -->
+            <TextView
+                android:id="@+id/blueLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Blue"
+                android:textColor="#0000FF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/greenLabel" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/blueSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:checked="true"
+                app:layout_constraintBottom_toBottomOf="@+id/blueLabel"
+                app:layout_constraintStart_toEndOf="@+id/blueLabel"
+                app:layout_constraintTop_toTopOf="@+id/blueLabel" />
+
+            <SeekBar
+                android:id="@+id/blueSeekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:max="100"
+                android:progress="0"
+                android:minHeight="48dp"
+                app:layout_constraintBottom_toBottomOf="@+id/blueSwitch"
+                app:layout_constraintEnd_toStartOf="@+id/blueValueEditText"
+                app:layout_constraintStart_toEndOf="@+id/blueSwitch"
+                app:layout_constraintTop_toTopOf="@+id/blueSwitch" />
+
+            <EditText
+                android:id="@+id/blueValueEditText"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:inputType="numberDecimal"
+                android:text="0.0"
+                android:textAlignment="center"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/blueSeekBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/blueSeekBar" />
+
+            <!-- Reset Button -->
+            <Button
+                android:id="@+id/resetButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Reset"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/blueLabel" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
