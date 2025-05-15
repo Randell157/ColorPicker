@@ -58,11 +58,11 @@
                 android:id="@+id/redLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
                 android:text="Red"
                 android:textColor="#FF0000"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
@@ -83,16 +83,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:max="100"
-                android:progress="0"
                 android:minHeight="48dp"
+                android:progress="0"
                 android:progressTint="#FF0000"
                 android:thumbTint="#FF0000"
                 app:layout_constraintBottom_toBottomOf="@+id/redSwitch"
                 app:layout_constraintEnd_toStartOf="@+id/redValueEditText"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/redSwitch"
-                app:layout_constraintTop_toTopOf="@+id/redSwitch" />
+                app:layout_constraintTop_toTopOf="@+id/redSwitch"
+                app:layout_constraintVertical_bias="0.0" />
 
             <EditText
                 android:id="@+id/redValueEditText"
@@ -108,11 +109,12 @@
                 app:layout_constraintTop_toTopOf="@+id/redSeekBar" />
 
             <!-- Green Color Controls (Text/Toggle/SeekBar/Textbox) -->
+
             <TextView
                 android:id="@+id/greenLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="36dp"
                 android:text="Green"
                 android:textColor="#00FF00"
                 android:textSize="18sp"
@@ -124,29 +126,31 @@
                 android:id="@+id/greenSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
                 android:checked="true"
-                app:thumbTint="#00FF00"
-                app:trackTint="#CCFFCC"
                 app:layout_constraintBottom_toBottomOf="@+id/greenLabel"
                 app:layout_constraintStart_toEndOf="@+id/greenLabel"
-                app:layout_constraintTop_toTopOf="@+id/greenLabel" />
+                app:layout_constraintTop_toTopOf="@+id/greenLabel"
+                app:layout_constraintVertical_bias="0.416"
+                app:thumbTint="#00FF00"
+                app:trackTint="#CCFFCC" />
 
             <SeekBar
                 android:id="@+id/greenSeekBar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="8dp"
                 android:max="100"
-                android:progress="0"
                 android:minHeight="48dp"
+                android:progress="0"
                 android:progressTint="#00FF00"
                 android:thumbTint="#00FF00"
                 app:layout_constraintBottom_toBottomOf="@+id/greenSwitch"
                 app:layout_constraintEnd_toStartOf="@+id/greenValueEditText"
+                app:layout_constraintHorizontal_bias="0.428"
                 app:layout_constraintStart_toEndOf="@+id/greenSwitch"
-                app:layout_constraintTop_toTopOf="@+id/greenSwitch" />
+                app:layout_constraintTop_toTopOf="@+id/greenSwitch"
+                app:layout_constraintVertical_bias="1.0" />
 
             <EditText
                 android:id="@+id/greenValueEditText"
@@ -162,11 +166,12 @@
                 app:layout_constraintTop_toTopOf="@+id/greenSeekBar" />
 
             <!-- Blue Color Controls (Text/Toggle/SeekBar/Textbox) -->
+
             <TextView
                 android:id="@+id/blueLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="44dp"
                 android:text="Blue"
                 android:textColor="#0000FF"
                 android:textSize="18sp"
@@ -191,10 +196,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:max="100"
-                android:progress="0"
                 android:minHeight="48dp"
+                android:progress="0"
                 android:progressTint="#0000FF"
                 android:thumbTint="#0000FF"
                 app:layout_constraintBottom_toBottomOf="@+id/blueSwitch"
@@ -220,7 +224,7 @@
                 android:id="@+id/resetButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="64dp"
                 android:text="Reset"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
