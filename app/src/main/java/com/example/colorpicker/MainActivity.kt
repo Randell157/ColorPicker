@@ -1,6 +1,7 @@
 package com.example.colorpicker
 
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -273,7 +274,10 @@ class MainActivity : AppCompatActivity() {
         val green = (viewModel.greenValue.value * 255).toInt()
         val blue = (viewModel.blueValue.value * 255).toInt()
 
-        // Set background color of the display box
-        colorDisplayBox.setBackgroundColor(Color.rgb(red, green, blue))
+        // Get the current background drawable
+        val drawable = colorDisplayBox.background.mutate() as GradientDrawable
+
+        // Set the color of the drawable
+        drawable.setColor(Color.rgb(red, green, blue))
     }
 }
