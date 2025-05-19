@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import android.view.View
 import android.widget.CompoundButton
+import android.widget.Toast
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 
@@ -46,6 +47,11 @@ class MainActivity : AppCompatActivity() {
     private var isUpdatingGreen = false
     private var isUpdatingBlue = false
 
+    // Restores last value from textbox
+    private var lastValidRedValue = 0.0f
+    private var lastValidGreenValue = 0.0f
+    private var lastValidBlueValue = 0.0f
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -67,6 +73,11 @@ class MainActivity : AppCompatActivity() {
 
         // Update UI from saved values from ViewModel
         updateUIFromViewModel()
+
+        // Initialize the last color values
+        lastValidRedValue = viewModel.redValue.value
+        lastValidGreenValue = viewModel.greenValue.value
+        lastValidBlueValue = viewModel.blueValue.value
     }
 
     override fun onPause() {
@@ -138,6 +149,149 @@ class MainActivity : AppCompatActivity() {
         isUpdatingBlue = false
     }
 
+    // Functions to revert to last valid value
+    private fun revertToLastValidRed() {
+        isUpdatingRed = true
+        redValueEditText.setText(lastValidRedValue.toString())
+        redSeekBar.progress = (lastValidRedValue * 100).toInt()
+        isUpdatingRed = false
+    }
+    private fun revertToLastValidGreen() {
+        isUpdatingGreen = true
+        greenValueEditText.setText(lastValidGreenValue.toString())
+        greenSeekBar.progress = (lastValidGreenValue * 100).toInt()
+        isUpdatingGreen = false
+    }
+    private fun revertToLastValidBlue() {
+        isUpdatingBlue = true
+        blueValueEditText.setText(lastValidBlueValue.toString())
+        blueSeekBar.progress = (lastValidBlueValue * 100).toInt()
+        isUpdatingBlue = false
+    }
+
+    private fun validateRedValue() {
+        val textValue = redValueEditText.text.toString()
+
+        try {
+            // Handle empty input
+            if (textValue.isEmpty() || textValue == "." || textValue == "0.") {
+                Toast.makeText(
+                    this,
+                    "Invalid red value. Reverting to previous value.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                revertToLastValidRed()
+                return
+            }
+
+            val inputValue = textValue.toFloat()
+
+            // Validate range
+            if (inputValue < 0f || inputValue > 1f) {
+                Toast.makeText(
+                    this,
+                    "Red value must be between 0.0 and 1.0",
+                    Toast.LENGTH_SHORT
+                ).show()
+                revertToLastValidRed()
+            } else {
+                // Update with valid value
+                lastValidRedValue = inputValue
+                viewModel.updateRedValue((inputValue))
+                updateColorDisplay()
+            }
+        } catch (e: NumberFormatException) {
+            Toast.makeText(
+                this,
+                "Invalid number format for Red value",
+                Toast.LENGTH_SHORT
+            ).show()
+            revertToLastValidRed()
+        }
+    }
+
+    private fun validateGreenValue() {
+        val textValue = greenValueEditText.text.toString()
+
+        try {
+            // Handle empty input
+            if (textValue.isEmpty() || textValue == "." || textValue == "0.") {
+                Toast.makeText(
+                    this,
+                    "Invalid green value. Reverting to previous value.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                revertToLastValidGreen()
+                return
+            }
+
+            val inputValue = textValue.toFloat()
+
+            // Validate range
+            if (inputValue < 0f || inputValue > 1f) {
+                Toast.makeText(
+                    this,
+                    "Green value must be between 0.0 and 1.0",
+                    Toast.LENGTH_SHORT
+                ).show()
+                revertToLastValidGreen()
+            } else {
+                // Update with valid value
+                lastValidGreenValue = inputValue
+                viewModel.updateGreenValue(inputValue)
+                updateColorDisplay()
+            }
+        } catch (e: NumberFormatException) {
+            Toast.makeText(
+                this,
+                "Invalid number format for Green value",
+                Toast.LENGTH_SHORT
+            ).show()
+            revertToLastValidGreen()
+        }
+    }
+
+    private fun validateBlueValue() {
+        val textValue = blueValueEditText.text.toString()
+
+        try {
+            // Handle empty input
+            if (textValue.isEmpty() || textValue == "." || textValue == "0.") {
+                Toast.makeText(
+                    this,
+                    "Invalid blue value. Reverting to previous value.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                revertToLastValidBlue()
+                return
+            }
+
+            val inputValue = textValue.toFloat()
+
+            // Validate range
+            if (inputValue < 0f || inputValue > 1f) {
+                Toast.makeText(
+                    this,
+                    "Blue value must be between 0.0 and 1.0",
+                    Toast.LENGTH_SHORT
+                ).show()
+                revertToLastValidBlue()
+            } else {
+                // Update with valid value
+                lastValidBlueValue = inputValue
+                viewModel.updateBlueValue(inputValue)
+                updateColorDisplay()
+            }
+        } catch (e: NumberFormatException) {
+            Toast.makeText(
+                this,
+                "Invalid number format for Blue value",
+                Toast.LENGTH_SHORT
+            ).show()
+            revertToLastValidBlue()
+        }
+    }
+
     // Setting up event listeners on UI
     private fun setupListeners() {
 
@@ -165,21 +319,36 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 if (!isUpdatingRed) {
+                    val textValue = s.toString()
+
+                    // Allow empty text, single decimal point, or starting with decimal
+                    if (textValue.isEmpty() || textValue == "." || textValue == "0.") {
+                        return // Allow intermediate states during typing
+                    }
+
                     try {
-                        val textValue = s.toString()
-                        if (textValue.isNotEmpty()) {
-                            var value = textValue.toFloat()
-                            value = value.coerceIn(0f, 1f)
-                            viewModel.updateRedValue(value)
-                            updateRedUI(value)
-                            updateColorDisplay()
+                        val inputValue = textValue.toFloat()
+
+                        // Only update the display during typing, don't update ViewModel yet
+                        if (inputValue >= 0f && inputValue <= 1f) {
+                            // Update UI but don't update ViewModel yet
+                            isUpdatingRed = true
+                            redSeekBar.progress = (inputValue * 100).toInt()
+                            isUpdatingRed = false
                         }
-                    } catch (_: NumberFormatException) {
-                        // Invalid input, ignore
+                    } catch (e: NumberFormatException) {
+                        // Ignore parsing errors during typing
                     }
                 }
             }
         })
+
+        // Add focus change listener to validate when focus is lost
+        redValueEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                validateRedValue()
+            }
+        }
 
         // Green controls
         greenSwitch.setOnCheckedChangeListener { _: CompoundButton, isChecked ->
@@ -205,21 +374,36 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 if (!isUpdatingGreen) {
+                    val textValue = s.toString()
+
+                    // Allow empty text, single decimal point, or starting with decimal
+                    if (textValue.isEmpty() || textValue == "." || textValue == "0.") {
+                        return // Allow intermediate states during typing
+                    }
+
                     try {
-                        val textValue = s.toString()
-                        if (textValue.isNotEmpty()) {
-                            var value = textValue.toFloat()
-                            value = value.coerceIn(0f, 1f)
-                            viewModel.updateGreenValue(value)
-                            updateGreenUI(value)
-                            updateColorDisplay()
+                        val inputValue = textValue.toFloat()
+
+                        // Only update the display during typing, don't update ViewModel yet
+                        if (inputValue >= 0f && inputValue <= 1f) {
+                            // Update UI but don't update ViewModel yet
+                            isUpdatingGreen = true
+                            greenSeekBar.progress = (inputValue * 100).toInt()
+                            isUpdatingGreen = false
                         }
-                    } catch (_: NumberFormatException) {
-                        // Invalid input, ignore
+                    } catch (e: NumberFormatException) {
+                        // Ignore parsing errors during typing
                     }
                 }
             }
         })
+
+        // Add focus change listener to validate when focus is lost
+        greenValueEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                validateGreenValue()
+            }
+        }
 
         // Blue controls
         blueSwitch.setOnCheckedChangeListener { _: CompoundButton, isChecked ->
@@ -245,25 +429,46 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 if (!isUpdatingBlue) {
+                    val textValue = s.toString()
+
+                    // Allow empty text, single decimal point, or starting with decimal
+                    if (textValue.isEmpty() || textValue == "." || textValue == "0.") {
+                        return // Allow intermediate states during typing
+                    }
+
                     try {
-                        val textValue = s.toString()
-                        if (textValue.isNotEmpty()) {
-                            var value = textValue.toFloat()
-                            value = value.coerceIn(0f, 1f)
-                            viewModel.updateBlueValue(value)
-                            updateBlueUI(value)
-                            updateColorDisplay()
+                        val inputValue = textValue.toFloat()
+
+                        // Only update the display during typing, don't update ViewModel yet
+                        if (inputValue >= 0f && inputValue <= 1f) {
+                            // Update UI but don't update ViewModel yet
+                            isUpdatingBlue = true
+                            blueSeekBar.progress = (inputValue * 100).toInt()
+                            isUpdatingBlue = false
                         }
-                    } catch (_: NumberFormatException) {
-                        // Invalid input, ignore
+                    } catch (e: NumberFormatException) {
+                        // Ignore parsing errors during typing
                     }
                 }
             }
         })
 
+        // Add focus change listener to validate when focus is lost
+        blueValueEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                validateBlueValue()
+            }
+        }
+
         // Reset button
         resetButton.setOnClickListener {
             viewModel.resetToDefault()
+
+            // Update last valid values
+            lastValidRedValue = viewModel.redValue.value
+            lastValidGreenValue = viewModel.greenValue.value
+            lastValidBlueValue = viewModel.blueValue.value
+
             updateUIFromViewModel()
         }
     }
